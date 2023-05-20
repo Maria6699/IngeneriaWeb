@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Node.js application",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/game-shop/app.js",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch web browser",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/game-shop/public"
+        },
+    ]
+}

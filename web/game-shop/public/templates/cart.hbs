@@ -1,0 +1,88 @@
+
+<script>
+    function remove_clicked(event, pid) {
+        event.preventDefault();
+        Model.remove(pid).done(function(){
+          route();
+        }).fail(function(error){
+           console.error('ADDITEM ERROR',
+              error.status,
+              error.statusText);
+        
+    });
+    };
+    function removeAll_clicked(event, pid) {
+        event.preventDefault();
+        Model.removeAll(pid).done(function(){
+          route();
+        }).fail(function(error){
+          console.error('ADDITEM ERROR',
+              error.status,
+              error.statusText);
+        
+    });
+    };
+</script>
+
+{{> navbar}}
+{{#> header}}
+<div class="d-flex pt-5 mb-4"></div>
+{{/ header}}
+    <main>
+{{> messages}}
+      <form>
+        <div class="container">
+           <div class="row justify-content-center align-items-center  ">
+           <div class="col-sm-6">  
+                <h2>Shopping Card</h2>
+                {{#if cartItems}}
+                <p style="text-align: right;"><strong>Total: </strong>{{formatPrice (total cartItems)}}</p>
+                <h2>Items</h2>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <hr>
+                      <th scope="col">Qty</th>
+                      <th scope="col">Product</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Total</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     {{#each cartItems}}
+                    <tr>
+                      <td>{{this.qty}}</td>
+                      <td>{{this.product.title}}</td>
+                      <td>{{this.product.price}}</td>
+                      <td>{{formatPrice (totalPriceItem this.product.price this.product.tax this.qty)}}</td>
+                    <td><div class="dropdown">
+                        <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                          Remove
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                          <li><a class="dropdown-item" href="#"
+                                    onclick="removeAll_clicked(event, {{this.product._id}})">All</a></li>
+                          <li><a class="dropdown-item" href="#"
+                                    onclick="remove_clicked(event, {{this.product._id}})">One</a></li>
+                        </ul>
+                      </div></td>
+                    </tr>
+                     {{/each}}
+                  </tbody>
+                </table>
+                <p><strong>Subtotal : </strong><span id="subtotal">{{formatPrice (subtotal cartItems)}}</span></p>
+                <p><strong>Tax : </strong><span id="tax"></span>{{formatPrice (tax cartItems)}}</p>
+                <p><strong>Total :  </strong><span id="total"></span>{{formatPrice (total cartItems)}}</p>
+                <div class="card-body d-flex justify-content-end align-items-center">
+                    <a href="/purchase" onclick="navigateTo(event, event.target.href)"  class="btn btn-primary btn-sm" role="button" aria-disabled="true" id="btn1">Purchase</a>
+                </div>
+              </div>
+              {{else}} <br>
+              <h5>There are no items in the cart</h5>
+              {{/if}}
+              </div>
+          </div>
+       </form>
+    </main>
+{{> footer}}

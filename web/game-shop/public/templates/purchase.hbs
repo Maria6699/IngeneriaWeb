@@ -1,0 +1,119 @@
+<script>
+
+  function checkout_clicked(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#purchase-form').submit();
+
+  }
+
+  $(function () {
+    $('#purchase-form').on('submit', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!this.checkValidity()) {
+        $(this).addClass('was-validated');
+        return false;
+      }
+
+      Model.purchase($('#Address').val(),  $('#cardowner').val(),$('#card').val()).done(function (order) {
+        navigateTo(event, '/order/id/' + order.number);
+      }).fail(function (error) {
+        console.error('PURCHASE ERROR',
+          error.status,
+          error.statusText);
+      })
+
+    });
+
+  });
+  $('#purchase-form input').on('blur', function (e) {
+    if (!this.checkValidity()) {
+      $(this).removeClass('is-valid').addClass('is-invalid');
+    }
+    else {
+      $(this).removeClass('is-invalid').addClass('is-valid');
+    }
+  });
+  
+</script>
+
+{{> navbar}}
+
+{{#> header}}
+<div class="d-flex pt-5 mb-4"></div>
+{{/ header}}
+
+<main>
+  {{> messages}}
+    <div class="container">
+      <div class="row justify-content-center align-items-center  ">
+        <div class="col-sm-6">
+             <legend>
+              <h2>Purchase</h2>
+             </legend>
+             <hr>
+            {{#unless cartItems}}
+            <p>There is not items in shopping cart</p>
+            {{/unless}}
+            {{#if cartItems}}
+            <form id="purchase-form" class="w-75 mx-auto needs-validation" novalidate>
+
+            <div class="form-group"> 
+              <label for="date" class="sr-only">Date</label>
+              <input type="date" class="form-control" id="date" required="" autocomplete="" style="WIDTH: 635px; HEIGHT: 30x"
+                aria-describedby="dateHelp">
+              <div class="invalid-feedback">The date field cannot be empty</div>
+            </div>
+            <div class="form-group"> 
+              <label for="Address" class="sr-only">Address</label>
+              <input type="Address" style="WIDTH: 635px; HEIGHT: 30x" placeholder="Address" class="form-control"
+                id="Address" required="" autocomplete="">
+              <div class="invalid-feedback">The address field cannot be empty</div>
+            </div>
+            <div class="form-group"> 
+              <label for="cardowner" class="sr-only">Card Owner</label>
+              <input type="cardowner" style="WIDTH: 635px; HEIGHT: 30x" placeholder="Card Owner" required="" autocomplete="" class="form-control"
+                id="cardowner">
+              <div class="invalid-feedback">The card owner field cannot be empty</div>
+            </div>
+            <div class="form-group"> 
+              <label for="card" class="sr-only">Card Number</label>
+              <input type="card" style="WIDTH: 635px; HEIGHT: 30x" placeholder="Card Number"required="" autocomplete="" class="form-control"
+                id="card">
+              <div class="invalid-feedback">The card number field cannot be empty</div>
+            </div>
+          </form>
+          &nbsp;
+          <h2>Items</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <hr>
+                <th scope="col">Qty</th>
+                <th scope="col">Product name</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+             {{#each cartItems}}
+            <tbody>
+              <tr>
+                <td>{{this.qty}}</td>
+                <td>{{this.product.title}}</td>
+                <td>{{formatPrice (totalPriceItem this.product.price this.product.tax this.qty)}}</td>
+              </tr>
+             </tbody>
+             {{/each}}
+          </table>
+          <p><strong>Subtotal : </strong>{{formatPrice (subtotal cartItems)}}</p>
+          <p><strong>Tax : </strong>{{formatPrice (tax cartItems)}}</p>
+          <p><strong>Total : </strong>{{formatPrice (total cartItems)}}</p>
+          <div class="card-body d-flex justify-content-end align-items-center">
+            <a onclick="checkout_clicked(event)" class="btn btn-primary btn-sm" role="button" aria-disabled="true" id="btn1">Checkout</a>
+          </div>
+          </div>{{/if}}
+        </div>
+      </div>
+    </div>
+</main>
+{{> footer}}

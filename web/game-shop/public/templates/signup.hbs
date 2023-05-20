@@ -1,0 +1,112 @@
+<script>
+    function signup_clicked(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('#signup-form').submit();
+    }
+    function checkPassword(){
+      if ($('#password').val() != $('#confirmationpassword').val()){
+          $('#confirmationpassword')[0].setCustomValidity('Password don´t march')
+          return false;
+      }else{
+        $('#confirmationpassword')[0].setCustomValidity('');
+        return true;
+      }
+    };
+    $(function () {
+        $('#signup-form').on('submit', function (e) {    
+            checkPassword();
+            if(!checkPassword()){
+                window.alert('The passwords are not the same try again')
+             }
+            if (!this.checkValidity() ) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('was-validated');
+                return false;
+            }
+          
+            e.preventDefault();
+            e.stopPropagation();
+            Model.signup($('#name').val(),$('#surname').val(),$('#address').val(),$('#birth').val(),$('#email').val(), $('#password').val()).done(function (user) {
+                Messages.success.push('You are registered now, please sign in!');
+                navigateTo(event, '/signin');
+            }).fail(function (error) {
+                Messages.danger.push(`${error.statusText} (${error.status}): Your email is already register!`);
+                navigateTo(event, '/signup');
+            });
+        });
+
+        $('#signup-form input').on('blur', function (e) {
+            checkPassword();
+            if (!this.checkValidity()) {
+                $(this).removeClass('is-valid').addClass('is-invalid');
+            }
+            else {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+            }
+        });
+    });
+</script>
+
+{{> navbar}}
+
+{{#> header}}
+<div class="d-flex pt-5 mb-4"></div>
+{{/ header}}
+
+<main>
+  {{> messages}}
+  <div class="container">
+    <div class="row justify-content-center align-items-center  ">
+      <div class="col-sm-6">
+        <div class="mb-3">
+          <form id="signup-form" class="w-75 mx-auto needs-validation" novalidate>
+                    <h2 style="text-align:justify">Sing up</h2>
+                    <div class="form-group">
+                      <label for="exampleInputname" class="sr-only">Name</label>
+                      <input type="name" class="form-control" id="name"  placeholder="name" required="" autofocus="" style="WIDTH: 635px; HEIGHT: 30x" aria-describedby="nameHelp">
+                      <div class="invalid-feedback">The name field cannot be empty</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputSurname" class="sr-only">Surname</label>
+                      <input type="Surname"  style="WIDTH: 635px; HEIGHT: 30x" placeholder="Surname" required="" autofocus=""  class="form-control" id="surname">
+                      <div class="invalid-feedback">The surname field cannot be empty</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputAddresss"  class="sr-only">Address</label>
+                      <input type="Addresss"  style="WIDTH: 635px; HEIGHT: 30x" placeholder="Address" required="" autofocus="" class="form-control" id="address">
+                      <div class="invalid-feedback">The address field cannot be empty</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputDate"  class="sr-only">Birth</label>
+                      <input type="date"  style="WIDTH: 635px; HEIGHT: 30x" placeholder="dd/mm/aaaa" required="" autofocus="" class="form-control" id="birth">
+                      <div class="invalid-feedback">The birth field cannot be empty</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail" class="sr-only">Email Address</label>
+                      <input type="email"  style="WIDTH: 635px; HEIGHT: 30x" placeholder="Email Address" required="" class="form-control" id="email">
+                      <div class="invalid-feedback">The Email Address field cannot be empty</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword"  class="sr-only">Password</label>
+                      <input type="password"  style="WIDTH: 635px; HEIGHT: 30x" placeholder="Password"  required="" value="admin" class="form-control" id="password">
+                      <div class="invalid-feedback">The Password field cannot be empty</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword"  class="sr-only">Confirmation Password</label>
+                      <input type="confirmation password"  style="WIDTH: 635px; HEIGHT: 30x" placeholder="Confirmation Password"  required="" value="admin" class="form-control" id="confirmationpassword">
+                      <div class="invalid-feedback">The Password field cannot be empty</div>
+                    </div>
+                    &nbsp;
+                    <div class="card-body">
+                      <a  href="/signin"  class="btn btn-primary btn-sm" onclick="signup_clicked(event)" role="button" aria-disabled="true" id="btn1">Sing up</a>
+                    </div>
+            </form>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+</main>
+    {{> footer}}
+    

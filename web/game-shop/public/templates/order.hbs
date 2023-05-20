@@ -1,0 +1,53 @@
+{{> navbar}}
+
+{{#> header}}
+<div class="d-flex pt-5 mb-4"></div>
+{{/ header}}
+
+<main>
+ {{> messages}}
+  <form>
+        <div class="container">
+           <div class="row justify-content-center align-items-center  ">
+           <div class="col-sm-6">  
+             <h2>Order Number</h2>
+             <p><strong>Number:</strong>{{order.number}}</p>
+             <p><strong>Address :</strong>{{order.address}}</p>
+             <p><strong>Date :</strong>{{formatDate order.date}}</p>
+             <p><strong>Card Number:</strong>{{order.cardNumber}}</p>
+            <p><strong>Card Holder:</strong>{{order.cardHolder}}</p>
+             <hr>
+             <h2>Products</h2>
+             <table class="table">
+              <thead>
+                <tr>
+                  <hr>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              {{#each order.orderItems}}
+              <tbody>
+                <tr>
+                  <td>{{this.qty}}</td>
+                  
+                  <td>{{this.product.title}}</td>
+                  
+                  <td>{{formatPrice price}}</td>
+                
+                  <td>{{formatPrice (subtotalOrderItem qty price)}}</td>
+                </tr>
+               {{/each}}
+              </tbody>
+            </table>
+            <p><strong>Subtotal :</strong>{{formatPrice (subtotalOrder order.orderItems)}}</p>
+            <p><strong>Tax :</strong>{{formatPrice (taxOrder order.orderItems)}}</p>
+            <p><strong>Total :</strong>{{formatPrice (totalOrder order.orderItems)}}</p>
+           </div>
+           </div>
+        </div>
+ </form>
+</main>
+{{> footer}} 

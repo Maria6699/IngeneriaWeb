@@ -1,0 +1,43 @@
+<script>
+
+    function signout_clicked(e,id) {
+        e.preventDefault();
+        e.stopPropagation();
+        Model.signout();
+        navigateTo(e, e.target.href);
+    }
+
+
+</script>
+
+
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="/" onclick="navigateTo(event, event.target.href)">SportShop<img id="myImage" src="logotipom.png" style="width: 20px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+          <ul class="navbar-nav mb-2 mb-md-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle {{#unless user}} disabled{{/unless}} " href="#" role="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">Shopping 
+               {{#if user}}<span class="badge text-bg-secondary">{{cartQty}}</span>{{/if}}</a>
+               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="cartDropdown">
+                 <li><a class="dropdown-item" href="/cart" onclick="navigateTo(event, event.target.href)">Cart</a></li>
+                 <li><a class="dropdown-item {{#if user}} disabled{{/if}}" href="/purchase" onclick="navigateTo(event, event.target.href)">Purchase</a></li>
+               </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">User</a>
+               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userDropdow">
+                 <li><a class="dropdown-item {{#if user}} disabled{{/if}}" href="/signup" onclick="navigateTo(event, event.target.href)">Sign up</a></li>
+                 <li><a class="dropdown-item {{#if user}} disabled{{/if}}" href="/signin" onclick="navigateTo(event, event.target.href)">Sign in</a></li>
+                 <li><a class="dropdown-item {{#unless user}} disabled{{/unless}}" href="/profile" onclick="navigateTo(event, event.target.href)">Profile</a></li>
+                 <li><hr class="dropdown-divider"></li>
+                 <li><a class="dropdown-item {{#unless user}} disabled{{/unless}}"  href="/"  onclick="signout_clicked(event,{{user._id}})">Sign out</a></li>
+               </ul>
+            </li>
+          </ul>
+        </div>
+  </nav>

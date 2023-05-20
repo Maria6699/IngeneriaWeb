@@ -1,0 +1,56 @@
+
+
+{{> navbar}}
+
+{{#> header}}
+<div class="d-flex pt-5 mb-4"></div>
+{{/ header}}
+{{> messages}}
+<main>
+  <form>
+    <div class="container">
+      <div class="row justify-content-center align-items-center  ">
+        <div class="col-sm-6">
+          <h2>Profile</h2>
+          <hr>
+          {{#if user}}
+          <p><strong>Name :</strong>{{user.name}}</p>
+          <p><strong>Surname :</strong>{{user.surname}}</p>
+          <p><strong>Birth :</strong>{{user.birthdate}}</p>
+          <p><strong>Address :</strong>{{user.address}}</p>
+          <p><strong>Email :</strong>{{user.email}}</p>
+          <hr>
+          {{/if}}
+          <h2>Order list</h2>
+          <hr>
+         {{#unless user.orders}}<p>NO ORDERS</p>{{/unless}}
+         {{#if user.orders}}
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Number</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each orders}}
+              <tr>
+                <td>{{formatDate this.date}}</td>
+                <td>{{this.number}}</td>
+                <td>{{totalOrder this.orderItems}}</td>
+                <td><a onclick="navigateTo(event, '/order/id/{{this.number}}')" class="btn btn-block btn-primary a" role="button" aria-disabled="true"
+                    id="btn1">Details</a></td>
+              {{/each}}
+              </tr>
+            </tbody>
+          </table>
+          {{else}} <br>
+             <h5>There are no items in the cart</h5>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </form>
+</main>
+{{> footer}}
